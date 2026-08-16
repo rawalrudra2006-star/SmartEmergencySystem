@@ -1,0 +1,1079 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Emergency Alert System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #b30000;
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-button {
+            background: white;
+            color: #b30000 !important;
+            padding: 9px 15px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+        }
+
+        .hero h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .sos-button {
+            background: #d60000;
+            color: white;
+            border: none;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            transition: 0.2s;
+        }
+
+        .sos-button:hover {
+            background: #a80000;
+            transform: scale(1.05);
+        }
+
+        .sos-button:active {
+            transform: scale(0.95);
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding: 45px 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 280px;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card button {
+            border: none;
+            background: #222;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            background: #444;
+        }
+
+        .nearby-section {
+            max-width: 1000px;
+            margin: 20px auto 50px;
+            padding: 35px 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .nearby-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .nearby-section > p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .nearby-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .nearby-button {
+            border: none;
+            background: #f4f6f8;
+            padding: 25px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 30px;
+        }
+
+        .nearby-button:hover {
+            background: #e8ebee;
+            transform: translateY(-3px);
+        }
+
+        .nearby-button strong {
+            display: block;
+            font-size: 17px;
+            margin-top: 10px;
+            color: #222;
+        }
+
+        .nearby-button span {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-top: 7px;
+        }
+
+        #nearbyMessage {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .report-section {
+            background: white;
+            max-width: 700px;
+            margin: 20px auto 50px;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-section h2 {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .report-section > p {
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .report-section label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .report-section select,
+        .report-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        .report-section textarea {
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 7px;
+            background: #b30000;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-button:hover {
+            background: #8f0000;
+        }
+
+        #reportMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        .call-section {
+            text-align: center;
+            margin: 30px 20px;
+        }
+
+        .call-button {
+            background: #087f23;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .call-button:hover {
+            background: #05651c;
+        }
+
+        footer {
+            text-align: center;
+            background: #222;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .nearby-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 0 6px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 45px 15px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .sos-button {
+                width: 150px;
+                height: 150px;
+                font-size: 26px;
+            }
+
+            .report-section {
+                margin: 20px 15px 40px;
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .nearby-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🚨 Smart Emergency</h1>
+
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="#report">Report</a>
+
+        <a href="#nearby-help">Nearby Help</a>
+
+        <a href="/dashboard">Dashboard</a>
+
+        <a href="/login" class="auth-button">Login</a>
+
+        <a href="/register" class="auth-button">Register</a>
+
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <h2>Emergency Help When You Need It</h2>
+
+    <p>
+        Quickly report an emergency and find nearby assistance.
+    </p>
+
+    <button class="sos-button" onclick="sendSOS()">
+        SOS
+    </button>
+
+</section>
+
+
+<section class="cards">
+
+    <div class="card">
+
+        <h3>🚨 Report Emergency</h3>
+
+        <p>
+            Report an accident, fire, medical emergency
+            or other incident.
+        </p>
+
+        <button onclick="goToReport()">
+            Report Now
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>📍 Nearby Help</h3>
+
+        <p>
+            Find nearby hospitals, police stations,
+            fire stations and ambulance services.
+        </p>
+
+        <button onclick="goToNearbyHelp()">
+            Find Help
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>🤖 AI Severity</h3>
+
+        <p>
+            Our system can classify the severity
+            of an emergency.
+        </p>
+
+        <button onclick="checkSeverity()">
+            Check Severity
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="nearby-section" id="nearby-help">
+
+    <h2>📍 Nearby Emergency Help</h2>
+
+    <p>
+        Allow location access and choose the emergency
+        service you need.
+    </p>
+
+
+    <div class="nearby-grid">
+
+        <button
+            class="nearby-button"
+            onclick="findEmergencyPlace('hospital')">
+
+            🏥
+
+            <strong>Hospitals</strong>
+
+            <span>Find nearby hospitals</span>
+
+        </button>
+
+
+        <button
+            class="nearby-button"
+            onclick="findEmergencyPlace('fire station')">
+
+            🚒
+
+            <strong>Fire Stations</strong>
+
+            <span>Find nearby fire stations</span>
+
+        </button>
+
+
+        <button
+            class="nearby-button"
+            onclick="findEmergencyPlace('police station')">
+
+            👮
+
+            <strong>Police Stations</strong>
+
+            <span>Find nearby police stations</span>
+
+        </button>
+
+
+        <button
+            class="nearby-button"
+            onclick="findEmergencyPlace('ambulance service')">
+
+            🚑
+
+            <strong>Ambulance</strong>
+
+            <span>Find nearby ambulance services</span>
+
+        </button>
+
+    </div>
+
+
+    <p id="nearbyMessage"></p>
+
+</section>
+
+
+<section class="report-section" id="report">
+
+    <h2>🚨 Report an Emergency</h2>
+
+    <p>
+        Provide details so help can reach you faster.
+    </p>
+
+
+    <form id="emergencyForm">
+
+        <label for="emergency_type">
+            Emergency Type
+        </label>
+
+        <select id="emergency_type" required>
+
+            <option value="">
+                Select Emergency
+            </option>
+
+            <option value="Medical">
+                🚑 Medical Emergency
+            </option>
+
+            <option value="Accident">
+                🚗 Accident
+            </option>
+
+            <option value="Fire">
+                🔥 Fire
+            </option>
+
+            <option value="Crime">
+                👮 Crime
+            </option>
+
+            <option value="Other">
+                ⚠️ Other
+            </option>
+
+        </select>
+
+
+        <label for="description">
+            Describe the Emergency
+        </label>
+
+        <textarea
+            id="description"
+            rows="5"
+            placeholder="What happened?"
+            required></textarea>
+
+
+        <button
+            type="submit"
+            class="submit-button">
+
+            🚨 Submit Emergency Report
+
+        </button>
+
+    </form>
+
+
+    <p id="reportMessage"></p>
+
+</section>
+
+
+<section class="call-section">
+
+    <button
+        class="call-button"
+        onclick="callEmergencyContact()">
+
+        📞 Call Emergency Contact
+
+    </button>
+
+</section>
+
+
+<footer>
+
+    <p>
+        Smart Emergency Alert System © 2026
+    </p>
+
+</footer>
+
+
+<script>
+
+function sendSOS() {
+
+    const confirmSOS = confirm(
+        "⚠️ EMERGENCY ALERT\n\n" +
+        "Are you sure you want to send an SOS?"
+    );
+
+    if (!confirmSOS) {
+        return;
+    }
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "❌ Your browser does not support location."
+        );
+
+        return;
+    }
+
+    alert("📍 Please allow location access.");
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            fetch("/sos", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+
+            })
+
+            .then(response => {
+
+                if (response.status === 401) {
+
+                    alert(
+                        "⚠️ Please login first to send SOS."
+                    );
+
+                    window.location.href = "/login";
+
+                    return null;
+                }
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server returned an error."
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                if (!data) {
+                    return;
+                }
+
+                if (data.success) {
+
+                    alert(
+                        "🚨 SOS ALERT SENT!\n\n" +
+                        "🔴 Severity: CRITICAL\n\n" +
+                        "📍 Location captured successfully!\n\n" +
+                        "Your emergency has been saved."
+                    );
+
+                    const mapLink =
+                        "https://www.google.com/maps?q=" +
+                        latitude +
+                        "," +
+                        longitude;
+
+                    window.open(
+                        mapLink,
+                        "_blank"
+                    );
+
+                } else {
+
+                    alert(
+                        "❌ " +
+                        (data.message ||
+                        "SOS could not be saved.")
+                    );
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert(
+                    "❌ Server error while sending SOS."
+                );
+
+            });
+
+        },
+
+        function(error) {
+
+            alert(
+                "❌ Location access failed.\n\n" +
+                "Please allow location permission " +
+                "and try again."
+            );
+
+        }
+
+    );
+
+}
+
+
+document
+    .getElementById("emergencyForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const emergencyType =
+            document
+                .getElementById("emergency_type")
+                .value;
+
+
+        const description =
+            document
+                .getElementById("description")
+                .value
+                .trim();
+
+
+        const message =
+            document
+                .getElementById("reportMessage");
+
+
+        if (!navigator.geolocation) {
+
+            message.innerText =
+                "❌ Location is not supported by your browser.";
+
+            return;
+
+        }
+
+
+        message.innerText =
+            "📍 Getting your location...";
+
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position) {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+
+                fetch("/report", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        emergency_type:
+                            emergencyType,
+
+                        description:
+                            description,
+
+                        latitude:
+                            latitude,
+
+                        longitude:
+                            longitude
+
+                    })
+
+                })
+
+                .then(response => {
+
+                    if (response.status === 401) {
+
+                        message.innerText =
+                            "⚠️ Please login first.";
+
+                        setTimeout(() => {
+                            window.location.href =
+                                "/login";
+                        }, 1000);
+
+                        return null;
+                    }
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Server error"
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(data => {
+
+                    if (!data) {
+                        return;
+                    }
+
+                    if (data.success) {
+
+                        message.style.color =
+                            "green";
+
+                        message.innerText =
+                            "✅ Emergency report submitted successfully!\n" +
+                            "Severity: " +
+                            data.severity;
+
+
+                        document
+                            .getElementById(
+                                "emergencyForm"
+                            )
+                            .reset();
+
+                    } else {
+
+                        message.style.color =
+                            "#b30000";
+
+                        message.innerText =
+                            "❌ " +
+                            (data.message ||
+                            "Something went wrong.");
+
+                    }
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    message.style.color =
+                        "#b30000";
+
+                    message.innerText =
+                        "❌ Server error.";
+
+                });
+
+            },
+
+            function(error) {
+
+                message.innerText =
+                    "❌ Please allow location access.";
+
+            }
+
+        );
+
+    });
+
+
+function goToReport() {
+
+    document
+        .getElementById("report")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+function goToNearbyHelp() {
+
+    document
+        .getElementById("nearby-help")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+function callEmergencyContact() {
+
+    const emergencyNumber =
+        "+918604394146";
+
+
+    const confirmCall = confirm(
+
+        "📞 Emergency Contact\n\n" +
+        "Do you want to call the emergency contact?"
+
+    );
+
+
+    if (confirmCall) {
+
+        window.location.href =
+            "tel:" + emergencyNumber;
+
+    }
+
+}
+
+
+function findEmergencyPlace(placeType) {
+
+    const message =
+        document.getElementById(
+            "nearbyMessage"
+        );
+
+
+    if (!navigator.geolocation) {
+
+        message.innerText =
+            "❌ Your browser does not support location.";
+
+        return;
+
+    }
+
+
+    message.innerText =
+        "📍 Getting your current location...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            message.innerText =
+                "🔎 Searching nearby " +
+                placeType +
+                "...";
+
+
+            const mapsURL =
+                "https://www.google.com/maps/search/" +
+                encodeURIComponent(placeType) +
+                "/@" +
+                latitude +
+                "," +
+                longitude +
+                ",14z";
+
+
+            window.open(
+                mapsURL,
+                "_blank"
+            );
+
+
+            message.innerText =
+                "✅ Nearby " +
+                placeType +
+                " search opened in Google Maps.";
+
+        },
+
+        function(error) {
+
+            message.innerText =
+                "❌ Location access denied.\n" +
+                "Please allow location permission " +
+                "and try again.";
+
+        }
+
+    );
+
+}
+
+
+function checkSeverity() {
+
+    const emergencyType =
+        document
+            .getElementById("emergency_type")
+            .value;
+
+
+    if (!emergencyType) {
+
+        alert(
+            "⚠️ Please select an emergency type " +
+            "in the report form first."
+        );
+
+        goToReport();
+
+        return;
+
+    }
+
+
+    let severity = "MEDIUM";
+
+
+    if (
+        emergencyType === "Fire" ||
+        emergencyType === "Medical" ||
+        emergencyType === "Accident"
+    ) {
+
+        severity = "HIGH";
+
+    }
+
+
+    alert(
+
+        "🤖 Emergency Severity\n\n" +
+
+        "Type: " +
+        emergencyType +
+
+        "\n\n" +
+
+        "Severity: " +
+        severity
+
+    );
+
+}
+
+</script>
+
+</body>
+</html>

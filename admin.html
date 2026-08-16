@@ -1,0 +1,865 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Emergency Admin Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #b30000;
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .activity-link {
+            background: white;
+            color: #b30000;
+
+            padding: 10px 15px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 10px;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .total {
+            border-left: 5px solid #1976d2;
+        }
+
+        .sos-stat {
+            border-left: 5px solid #b30000;
+        }
+
+        .critical-stat {
+            border-left: 5px solid #e65100;
+        }
+
+        .new-stat {
+            border-left: 5px solid #087f23;
+        }
+
+        /* =========================
+           DASHBOARD CARD
+        ========================= */
+
+        .dashboard-card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.1);
+
+            overflow-x: auto;
+        }
+
+        .dashboard-card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1250px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+
+            border-bottom:
+                1px solid #ddd;
+
+            text-align: left;
+
+            vertical-align: middle;
+        }
+
+        th {
+            background: #222;
+            color: white;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* =========================
+           USER
+        ========================= */
+
+        .user-info strong {
+            display: block;
+        }
+
+        .user-info small {
+            color: #666;
+        }
+
+        /* =========================
+           ALERT TYPE
+        ========================= */
+
+        .sos {
+            color: white;
+
+            background: #b30000;
+
+            padding: 5px 9px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        .report {
+            background: #e3f2fd;
+
+            color: #1565c0;
+
+            padding: 5px 9px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           SEVERITY
+        ========================= */
+
+        .critical {
+            color: white;
+
+            background: #b30000;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        .high {
+            color: white;
+
+            background: #e65100;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        .medium {
+            background: #ffd54f;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        .low {
+            background: #81c784;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status-select {
+            padding: 7px;
+
+            border-radius: 6px;
+
+            border: 1px solid #ccc;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           MAP
+        ========================= */
+
+        .map-button {
+            background: #1976d2;
+
+            color: white;
+
+            padding: 7px 12px;
+
+            border-radius: 5px;
+
+            text-decoration: none;
+
+            display: inline-block;
+        }
+
+        .map-button:hover {
+            background: #125aa0;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+            margin-top: 15px;
+
+            font-weight: bold;
+
+            text-align: center;
+        }
+
+        .empty {
+            text-align: center;
+
+            padding: 30px;
+
+            color: #777;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .dashboard-card {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        🚨 Emergency Admin Dashboard
+    </h1>
+
+    <a
+        href="/admin/activity"
+        class="activity-link">
+
+        📋 Activity Logs
+
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    {% set total_count = emergencies|length %}
+
+    {% set sos_count = emergencies
+        |selectattr("alert_type", "equalto", "SOS")
+        |list|length %}
+
+    {% set critical_count = emergencies
+        |selectattr("severity", "equalto", "CRITICAL")
+        |list|length %}
+
+    {% set new_count = emergencies
+        |selectattr("status", "equalto", "NEW")
+        |list|length %}
+
+
+    <div class="stats">
+
+
+        <div class="stat-card total">
+
+            <h3>
+                Total Emergencies
+            </h3>
+
+            <div class="stat-number">
+                {{ total_count }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card sos-stat">
+
+            <h3>
+                SOS Alerts
+            </h3>
+
+            <div class="stat-number">
+                {{ sos_count }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card critical-stat">
+
+            <h3>
+                Critical Emergencies
+            </h3>
+
+            <div class="stat-number">
+                {{ critical_count }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card new-stat">
+
+            <h3>
+                New Reports
+            </h3>
+
+            <div class="stat-number">
+                {{ new_count }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         EMERGENCY TABLE
+    ========================= -->
+
+    <div class="dashboard-card">
+
+        <h2>
+            Emergency Reports
+        </h2>
+
+        <p class="subtitle">
+            Monitor users, emergency alerts, locations
+            and response status.
+        </p>
+
+
+        {% if emergencies %}
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>User</th>
+
+                    <th>Type</th>
+
+                    <th>Alert</th>
+
+                    <th>Description</th>
+
+                    <th>Severity</th>
+
+                    <th>Status</th>
+
+                    <th>Location</th>
+
+                    <th>Date & Time</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for emergency in emergencies %}
+
+
+                <tr>
+
+
+                    <!-- ID -->
+
+                    <td>
+                        #{{ emergency["id"] }}
+                    </td>
+
+
+                    <!-- USER -->
+
+                    <td>
+
+                        <div class="user-info">
+
+                            {% if emergency["user_name"] %}
+
+                                <strong>
+                                    👤 {{ emergency["user_name"] }}
+                                </strong>
+
+                                <small>
+                                    📧 {{ emergency["user_email"] }}
+                                </small>
+
+                            {% else %}
+
+                                <small>
+                                    Unknown User
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- TYPE -->
+
+                    <td>
+                        {{ emergency["emergency_type"] }}
+                    </td>
+
+
+                    <!-- ALERT -->
+
+                    <td>
+
+                        {% if emergency["alert_type"] == "SOS" %}
+
+                            <span class="sos">
+                                🆘 SOS
+                            </span>
+
+                        {% else %}
+
+                            <span class="report">
+                                📋 REPORT
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <td>
+                        {{ emergency["description"] or "-" }}
+                    </td>
+
+
+                    <!-- SEVERITY -->
+
+                    <td>
+
+
+                        {% if emergency["severity"] == "CRITICAL" %}
+
+                            <span class="critical">
+                                CRITICAL
+                            </span>
+
+
+                        {% elif emergency["severity"] == "HIGH" %}
+
+                            <span class="high">
+                                HIGH
+                            </span>
+
+
+                        {% elif emergency["severity"] == "MEDIUM" %}
+
+                            <span class="medium">
+                                MEDIUM
+                            </span>
+
+
+                        {% else %}
+
+                            <span class="low">
+                                LOW
+                            </span>
+
+                        {% endif %}
+
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        <select
+                            class="status-select"
+                            onchange="updateStatus(
+                                {{ emergency['id'] }},
+                                this.value
+                            )">
+
+
+                            <option
+                                value="NEW"
+                                {% if emergency["status"] == "NEW" %}
+                                selected
+                                {% endif %}>
+
+                                NEW
+
+                            </option>
+
+
+                            <option
+                                value="IN PROGRESS"
+                                {% if emergency["status"] == "IN PROGRESS" %}
+                                selected
+                                {% endif %}>
+
+                                IN PROGRESS
+
+                            </option>
+
+
+                            <option
+                                value="RESOLVED"
+                                {% if emergency["status"] == "RESOLVED" %}
+                                selected
+                                {% endif %}>
+
+                                RESOLVED
+
+                            </option>
+
+
+                        </select>
+
+                    </td>
+
+
+                    <!-- LOCATION -->
+
+                    <td>
+
+
+                        {% if emergency["latitude"] is not none
+                              and emergency["longitude"] is not none %}
+
+
+                            <a
+                                class="map-button"
+                                target="_blank"
+                                href="https://www.google.com/maps?q={{ emergency['latitude'] }},{{ emergency['longitude'] }}">
+
+                                📍 View Map
+
+                            </a>
+
+
+                        {% else %}
+
+                            No Location
+
+                        {% endif %}
+
+
+                    </td>
+
+
+                    <!-- DATE -->
+
+                    <td>
+                        {{ emergency["created_at"] }}
+                    </td>
+
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+        <p
+            id="statusMessage"
+            class="message">
+        </p>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            <h3>
+                No emergency reports yet.
+            </h3>
+
+            <p>
+                Submitted emergencies will appear here.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+async function updateStatus(
+    emergencyId,
+    newStatus
+) {
+
+
+    const message =
+        document.getElementById(
+            "statusMessage"
+        );
+
+
+    message.style.color =
+        "#555";
+
+    message.innerText =
+        "⏳ Updating status...";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/update_status",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            id:
+                                emergencyId,
+
+                            status:
+                                newStatus
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+
+            message.style.color =
+                "green";
+
+            message.innerText =
+                "✅ Status updated successfully.";
+
+
+            setTimeout(
+                function() {
+
+                    message.innerText =
+                        "";
+
+                    location.reload();
+
+                },
+                1200
+            );
+
+
+        } else {
+
+
+            message.style.color =
+                "#b30000";
+
+            message.innerText =
+                "❌ " +
+                data.message;
+
+        }
+
+
+    } catch (error) {
+
+
+        console.error(error);
+
+
+        message.style.color =
+            "#b30000";
+
+        message.innerText =
+            "❌ Server error while updating status.";
+
+    }
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
+```

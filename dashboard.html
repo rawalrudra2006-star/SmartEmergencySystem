@@ -1,0 +1,2830 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Smart Emergency</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --red: #c62828;
+            --red-dark: #991b1b;
+            --red-light: #fee2e2;
+            --orange: #f59e0b;
+            --orange-light: #fef3c7;
+            --green: #16a34a;
+            --green-light: #dcfce7;
+            --blue: #2563eb;
+            --blue-light: #dbeafe;
+            --purple: #7c3aed;
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #151922;
+            color: white;
+            padding: 25px 16px;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px 30px;
+        }
+
+        .brand-icon {
+            font-size: 30px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+        }
+
+        .brand span {
+            display: block;
+            color: #aeb4c0;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .nav-title {
+            color: #737b89;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 10px 12px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 14px;
+            margin: 5px 0;
+            color: #cbd0d9;
+            text-decoration: none;
+            border-radius: 9px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #252b37;
+            color: white;
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+        }
+
+        .logout {
+            background: #7f1d1d;
+        }
+
+        .logout:hover {
+            background: #991b1b;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .page-title h2 {
+            font-size: 22px;
+        }
+
+        .page-title p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--green-light);
+            color: #166534;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+        }
+
+        .notification {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 9px;
+            font-size: 18px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--red);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 30px 35px 50px;
+        }
+
+        .welcome {
+            background: linear-gradient(135deg, #991b1b, #dc2626);
+            color: white;
+            padding: 28px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .welcome h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #fee2e2;
+        }
+
+        .welcome-time {
+            text-align: right;
+            font-size: 13px;
+            color: #fecaca;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .stat-red .stat-icon {
+            background: var(--red-light);
+        }
+
+        .stat-orange .stat-icon {
+            background: var(--orange-light);
+        }
+
+        .stat-blue .stat-icon {
+            background: var(--blue-light);
+        }
+
+        .stat-green .stat-icon {
+            background: var(--green-light);
+        }
+
+        /* =========================
+           SOS PANEL
+        ========================= */
+
+        .sos-panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .sos-info h2 {
+            margin-bottom: 8px;
+        }
+
+        .sos-info p {
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .sos-warning {
+            margin-top: 12px;
+            color: #991b1b;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .sos-main-button {
+            width: 135px;
+            height: 135px;
+            border-radius: 50%;
+            border: 8px solid #fee2e2;
+            background: #dc2626;
+            color: white;
+            font-size: 21px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.35);
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+
+        .sos-main-button:hover {
+            transform: scale(1.05);
+            background: #b91c1c;
+        }
+
+        .sos-main-button:active {
+            transform: scale(0.96);
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 19px;
+        }
+
+        .section-title span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .quick-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 20px 15px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .quick-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .quick-card h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .quick-card p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .quick-card button {
+            border: none;
+            background: #f3f4f6;
+            color: #374151;
+            padding: 8px 12px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .quick-card button:hover {
+            background: #e5e7eb;
+        }
+
+        /* =========================
+           GRID
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 22px;
+            min-width: 0;
+        }
+
+        /* =========================
+           EMERGENCY HISTORY
+        ========================= */
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            border: 1px solid var(--border);
+            background: white;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .filter-button.active,
+        .filter-button:hover {
+            background: var(--red);
+            color: white;
+            border-color: var(--red);
+        }
+
+        .emergency-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .emergency-item {
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            padding: 15px;
+            transition: 0.2s;
+        }
+
+        .emergency-item:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .emergency-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .emergency-type {
+            font-weight: bold;
+        }
+
+        .emergency-description {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .badges {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .critical {
+            background: var(--red-light);
+            color: #991b1b;
+        }
+
+        .high {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .medium {
+            background: var(--orange-light);
+            color: #92400e;
+        }
+
+        .low {
+            background: var(--green-light);
+            color: #166534;
+        }
+
+        .new {
+            background: var(--blue-light);
+            color: #1d4ed8;
+        }
+
+        .progress {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .resolved {
+            background: var(--green-light);
+            color: #166534;
+        }
+
+        .emergency-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .date {
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .map-button {
+            text-decoration: none;
+            background: var(--blue);
+            color: white;
+            padding: 6px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+        }
+
+        .map-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* =========================
+           ACTIVITY
+        ========================= */
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-text strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .activity-text span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================
+           EMPTY / LOADING
+        ========================= */
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 15px;
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-button {
+            border: none;
+            background: #f3f4f6;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .location-box {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .submit-report {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            background: var(--red);
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .submit-report:hover {
+            background: var(--red-dark);
+        }
+
+        .modal-message {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #151922;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 9px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 3000;
+            max-width: 350px;
+            font-size: 13px;
+        }
+
+        .toast.show {
+            display: block;
+            animation: toastIn 0.25s ease;
+        }
+
+        @keyframes toastIn {
+            from {
+                transform: translateY(15px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* =========================
+           MOBILE MENU
+        ========================= */
+
+        .menu-button {
+            display: none;
+            border: none;
+            background: white;
+            font-size: 22px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: 0.25s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 20px 18px 40px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .system-status {
+                display: none;
+            }
+
+            .user-avatar {
+                display: none;
+            }
+
+            .welcome {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .welcome-time {
+                text-align: left;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .sos-panel {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .quick-card:last-child {
+                grid-column: span 2;
+            }
+
+        }
+
+        @media (max-width: 420px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-card:last-child {
+                grid-column: auto;
+            }
+
+            .page-title p {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🚨
+        </div>
+
+        <div>
+            <h1>Smart Emergency</h1>
+            <span>Emergency Response System</span>
+        </div>
+
+    </div>
+
+
+    <div class="nav-title">
+        Main Menu
+    </div>
+
+
+    <a href="/dashboard" class="nav-link active">
+
+        <span class="nav-icon">📊</span>
+
+        Dashboard
+
+    </a>
+
+
+    <a href="#emergencies" class="nav-link">
+
+        <span class="nav-icon">🚨</span>
+
+        Emergencies
+
+    </a>
+
+
+    <a href="#activity" class="nav-link">
+
+        <span class="nav-icon">📋</span>
+
+        Activity
+
+    </a>
+
+
+    <a href="#nearby" class="nav-link">
+
+        <span class="nav-icon">📍</span>
+
+        Nearby Help
+
+    </a>
+
+
+    <div class="nav-title">
+        Account
+    </div>
+
+
+    <a href="#profile" class="nav-link">
+
+        <span class="nav-icon">👤</span>
+
+        Profile
+
+    </a>
+
+
+    <div class="sidebar-bottom">
+
+        <a href="/logout" class="nav-link logout">
+
+            <span class="nav-icon">🚪</span>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="top-actions">
+
+            <button
+                class="menu-button"
+                onclick="toggleSidebar()">
+
+                ☰
+
+            </button>
+
+            <div class="page-title">
+
+                <h2>Dashboard</h2>
+
+                <p>Emergency monitoring and response center</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System Operational
+
+            </div>
+
+
+            <button
+                class="notification"
+                onclick="showToast('No new notifications.')">
+
+                🔔
+
+            </button>
+
+
+            <div class="user-avatar">
+
+                {{ user_name[:1]|upper }}
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <div>
+
+                <h1>
+                    Welcome, {{ user_name }} 👋
+                </h1>
+
+                <p>
+                    Stay prepared. Help is just one click away.
+                </p>
+
+            </div>
+
+
+            <div class="welcome-time">
+
+                <div>Current Session</div>
+
+                <strong id="currentTime">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================= -->
+
+        <section class="stats">
+
+            <div class="stat-card stat-red">
+
+                <div class="stat-top">
+
+                    <span>
+                        Total Emergencies
+                    </span>
+
+                    <div class="stat-icon">
+                        🚨
+                    </div>
+
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    All reported incidents
+                </div>
+
+            </div>
+
+
+            <div class="stat-card stat-orange">
+
+                <div class="stat-top">
+
+                    <span>
+                        Critical
+                    </span>
+
+                    <div class="stat-icon">
+                        🔴
+                    </div>
+
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="criticalCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    Immediate attention
+                </div>
+
+            </div>
+
+
+            <div class="stat-card stat-blue">
+
+                <div class="stat-top">
+
+                    <span>
+                        Active
+                    </span>
+
+                    <div class="stat-icon">
+                        🔄
+                    </div>
+
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="activeCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    New or in progress
+                </div>
+
+            </div>
+
+
+            <div class="stat-card stat-green">
+
+                <div class="stat-top">
+
+                    <span>
+                        Resolved
+                    </span>
+
+                    <div class="stat-icon">
+                        ✅
+                    </div>
+
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="resolvedCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    Successfully resolved
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SOS
+        ================================================= -->
+
+        <section class="sos-panel">
+
+            <div class="sos-info">
+
+                <h2>
+                    🆘 Emergency SOS
+                </h2>
+
+                <p>
+                    Use SOS only during a real emergency.
+                    Your current location will be captured
+                    and the emergency alert will be saved.
+                </p>
+
+                <div class="sos-warning">
+                    ⚠️ SOS alerts are classified as CRITICAL.
+                </div>
+
+            </div>
+
+
+            <button
+                class="sos-main-button"
+                onclick="sendSOS()">
+
+                SOS
+
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+        ================================================= -->
+
+        <div class="section-title">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <span>
+                Emergency tools
+            </span>
+
+        </div>
+
+
+        <section class="quick-actions" id="nearby">
+
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    🚨
+                </div>
+
+                <h3>
+                    Report Emergency
+                </h3>
+
+                <p>
+                    Submit a detailed report
+                </p>
+
+                <button onclick="openReportModal()">
+                    Report
+                </button>
+
+            </div>
+
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    🏥
+                </div>
+
+                <h3>
+                    Hospital
+                </h3>
+
+                <p>
+                    Find nearby hospitals
+                </p>
+
+                <button onclick="findPlace('hospital')">
+                    Find
+                </button>
+
+            </div>
+
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    👮
+                </div>
+
+                <h3>
+                    Police
+                </h3>
+
+                <p>
+                    Find nearby police
+                </p>
+
+                <button onclick="findPlace('police station')">
+                    Find
+                </button>
+
+            </div>
+
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    🚒
+                </div>
+
+                <h3>
+                    Fire Station
+                </h3>
+
+                <p>
+                    Find fire stations
+                </p>
+
+                <button onclick="findPlace('fire station')">
+                    Find
+                </button>
+
+            </div>
+
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    📞
+                </div>
+
+                <h3>
+                    Emergency Contact
+                </h3>
+
+                <p>
+                    Call saved contact
+                </p>
+
+                <button onclick="callEmergencyContact()">
+                    Call
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             LOWER DASHBOARD
+        ================================================= -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- EMERGENCIES -->
+
+            <section
+                class="panel"
+                id="emergencies">
+
+                <div class="section-title">
+
+                    <h2>
+                        Recent Emergencies
+                    </h2>
+
+                    <span id="emergencyTotal">
+                        0 records
+                    </span>
+
+                </div>
+
+
+                <div class="filter-row">
+
+                    <button
+                        class="filter-button active"
+                        onclick="filterEmergencies('ALL', this)">
+
+                        All
+
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        onclick="filterEmergencies('SOS', this)">
+
+                        SOS
+
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        onclick="filterEmergencies('Medical', this)">
+
+                        Medical
+
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        onclick="filterEmergencies('Accident', this)">
+
+                        Accident
+
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        onclick="filterEmergencies('Fire', this)">
+
+                        Fire
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="emergency-list"
+                    id="emergencyList">
+
+                    <div class="loading">
+                        Loading emergencies...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTIVITY -->
+
+            <section
+                class="panel"
+                id="activity">
+
+                <div class="section-title">
+
+                    <h2>
+                        Recent Activity
+                    </h2>
+
+                    <span>
+                        Latest events
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="activity-list"
+                    id="activityList">
+
+                    <div class="loading">
+                        Loading activity...
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- PROFILE -->
+
+        <section
+            class="panel"
+            id="profile"
+            style="margin-top:20px;">
+
+            <div class="section-title">
+
+                <h2>
+                    👤 Profile
+                </h2>
+
+                <span>
+                    Account information
+                </span>
+
+            </div>
+
+
+            <div style="
+                display:grid;
+                grid-template-columns:
+                repeat(auto-fit,minmax(200px,1fr));
+                gap:15px;
+            ">
+
+                <div>
+
+                    <small style="color:#6b7280;">
+                        Full Name
+                    </small>
+
+                    <p style="
+                        font-weight:bold;
+                        margin-top:5px;
+                    ">
+                        {{ user_name }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <small style="color:#6b7280;">
+                        Email
+                    </small>
+
+                    <p style="
+                        font-weight:bold;
+                        margin-top:5px;
+                    ">
+                        {{ user_email }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <small style="color:#6b7280;">
+                        Account Status
+                    </small>
+
+                    <p style="
+                        color:#16a34a;
+                        font-weight:bold;
+                        margin-top:5px;
+                    ">
+                        ● Active
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     REPORT MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="reportModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>
+                🚨 Report Emergency
+            </h2>
+
+            <button
+                class="close-button"
+                onclick="closeReportModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="reportForm">
+
+
+            <div class="form-group">
+
+                <label>
+                    Emergency Type
+                </label>
+
+                <select
+                    id="reportType"
+                    required>
+
+                    <option value="">
+                        Select emergency type
+                    </option>
+
+                    <option value="Medical">
+                        🚑 Medical Emergency
+                    </option>
+
+                    <option value="Accident">
+                        🚗 Accident
+                    </option>
+
+                    <option value="Fire">
+                        🔥 Fire
+                    </option>
+
+                    <option value="Crime">
+                        👮 Crime
+                    </option>
+
+                    <option value="Other">
+                        ⚠️ Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Describe the Emergency
+                </label>
+
+                <textarea
+                    id="reportDescription"
+                    placeholder="Explain what happened..."
+                    required></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    📍 Current Location
+                </label>
+
+                <div
+                    class="location-box"
+                    id="reportLocation">
+
+                    Location will be detected when
+                    you submit the report.
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-report">
+
+                🚨 Submit Emergency Report
+
+            </button>
+
+
+            <div
+                class="modal-message"
+                id="modalMessage">
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast">
+
+</div>
+
+
+<script>
+
+    let allEmergencies = [];
+
+
+    /* =====================================================
+       CURRENT TIME
+    ===================================================== */
+
+    function updateTime() {
+
+        const now = new Date();
+
+        document.getElementById("currentTime").innerText =
+            now.toLocaleString();
+
+    }
+
+    updateTime();
+
+    setInterval(updateTime, 1000);
+
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    function toggleSidebar() {
+
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.innerText = message;
+
+        toast.classList.add("show");
+
+        setTimeout(function () {
+
+            toast.classList.remove("show");
+
+        }, 3500);
+
+    }
+
+
+    /* =====================================================
+       LOCATION
+    ===================================================== */
+
+    function getLocation() {
+
+        return new Promise(function(resolve) {
+
+            if (!navigator.geolocation) {
+
+                resolve({
+                    latitude: null,
+                    longitude: null
+                });
+
+                return;
+
+            }
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    resolve({
+
+                        latitude:
+                            position.coords.latitude,
+
+                        longitude:
+                            position.coords.longitude
+
+                    });
+
+                },
+
+                function() {
+
+                    resolve({
+
+                        latitude: null,
+
+                        longitude: null
+
+                    });
+
+                },
+
+                {
+
+                    enableHighAccuracy: true,
+
+                    timeout: 10000,
+
+                    maximumAge: 0
+
+                }
+
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SEND SOS
+    ===================================================== */
+
+    async function sendSOS() {
+
+        const confirmed =
+            confirm(
+                "⚠️ EMERGENCY SOS\n\nAre you sure you want to send an SOS alert?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        showToast("📍 Getting your location...");
+
+
+        try {
+
+            const location =
+                await getLocation();
+
+
+            showToast("⏳ Sending SOS alert...");
+
+
+            const response =
+                await fetch(
+                    "/sos",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                latitude:
+                                    location.latitude,
+
+                                longitude:
+                                    location.longitude
+
+                            })
+
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "/login";
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (data.success) {
+
+                showToast(
+                    "🆘 SOS alert sent successfully!"
+                );
+
+                loadEmergencies();
+
+                loadActivity();
+
+            }
+
+            else {
+
+                showToast(
+                    "❌ " + data.message
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "❌ Unable to send SOS alert."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       REPORT MODAL
+    ===================================================== */
+
+    function openReportModal() {
+
+        document
+            .getElementById("reportModal")
+            .classList.add("show");
+
+        document
+            .getElementById("modalMessage")
+            .innerText = "";
+
+    }
+
+
+    function closeReportModal() {
+
+        document
+            .getElementById("reportModal")
+            .classList.remove("show");
+
+    }
+
+
+    document
+        .getElementById("reportModal")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target ===
+                    document.getElementById("reportModal")
+                ) {
+
+                    closeReportModal();
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       REPORT FORM
+    ===================================================== */
+
+    document
+        .getElementById("reportForm")
+        .addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const emergencyType =
+                    document
+                        .getElementById("reportType")
+                        .value;
+
+
+                const description =
+                    document
+                        .getElementById("reportDescription")
+                        .value
+                        .trim();
+
+
+                const message =
+                    document
+                        .getElementById("modalMessage");
+
+
+                if (!emergencyType || !description) {
+
+                    message.innerText =
+                        "❌ Please complete all fields.";
+
+                    message.style.color =
+                        "#b91c1c";
+
+                    return;
+
+                }
+
+
+                message.innerText =
+                    "📍 Getting your location...";
+
+                message.style.color =
+                    "#6b7280";
+
+
+                try {
+
+                    const location =
+                        await getLocation();
+
+
+                    message.innerText =
+                        "⏳ Submitting report...";
+
+
+                    const response =
+                        await fetch(
+                            "/report",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        emergency_type:
+                                            emergencyType,
+
+                                        description:
+                                            description,
+
+                                        latitude:
+                                            location.latitude,
+
+                                        longitude:
+                                            location.longitude
+
+                                    })
+
+                            }
+                        );
+
+
+                    if (response.status === 401) {
+
+                        window.location.href =
+                            "/login";
+
+                        return;
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.success) {
+
+                        message.innerText =
+                            "✅ Report submitted successfully. Severity: " +
+                            data.severity;
+
+                        message.style.color =
+                            "#166534";
+
+
+                        document
+                            .getElementById("reportForm")
+                            .reset();
+
+
+                        loadEmergencies();
+
+                        loadActivity();
+
+
+                        setTimeout(
+                            closeReportModal,
+                            1500
+                        );
+
+                    }
+
+                    else {
+
+                        message.innerText =
+                            "❌ " + data.message;
+
+                        message.style.color =
+                            "#b91c1c";
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+                    message.innerText =
+                        "❌ Server error. Please try again.";
+
+                    message.style.color =
+                        "#b91c1c";
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       LOAD EMERGENCIES
+    ===================================================== */
+
+    async function loadEmergencies() {
+
+        const list =
+            document.getElementById(
+                "emergencyList"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/my_emergencies"
+                );
+
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "/login";
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                list.innerHTML =
+                    '<div class="empty">Unable to load emergencies.</div>';
+
+                return;
+
+            }
+
+
+            allEmergencies =
+                data.emergencies || [];
+
+
+            updateStats();
+
+            renderEmergencies(
+                allEmergencies
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            list.innerHTML =
+                '<div class="empty">❌ Could not connect to server.</div>';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE STATS
+    ===================================================== */
+
+    function updateStats() {
+
+        const total =
+            allEmergencies.length;
+
+
+        const critical =
+            allEmergencies.filter(
+                item =>
+                    item.severity === "CRITICAL"
+            ).length;
+
+
+        const active =
+            allEmergencies.filter(
+                item =>
+                    item.status === "NEW" ||
+                    item.status === "IN PROGRESS"
+            ).length;
+
+
+        const resolved =
+            allEmergencies.filter(
+                item =>
+                    item.status === "RESOLVED"
+            ).length;
+
+
+        document.getElementById(
+            "totalCount"
+        ).innerText = total;
+
+
+        document.getElementById(
+            "criticalCount"
+        ).innerText = critical;
+
+
+        document.getElementById(
+            "activeCount"
+        ).innerText = active;
+
+
+        document.getElementById(
+            "resolvedCount"
+        ).innerText = resolved;
+
+
+        document.getElementById(
+            "emergencyTotal"
+        ).innerText =
+            total + " record" +
+            (total === 1 ? "" : "s");
+
+    }
+
+
+    /* =====================================================
+       RENDER EMERGENCIES
+    ===================================================== */
+
+    function renderEmergencies(items) {
+
+        const list =
+            document.getElementById(
+                "emergencyList"
+            );
+
+
+        if (!items.length) {
+
+            list.innerHTML =
+                '<div class="empty">🎉 No emergencies found.</div>';
+
+            return;
+
+        }
+
+
+        list.innerHTML = "";
+
+
+        items.slice(0, 20).forEach(
+            function(item) {
+
+                const severityClass =
+                    String(
+                        item.severity || "LOW"
+                    )
+                    .toLowerCase();
+
+
+                let statusClass =
+                    "new";
+
+
+                if (
+                    item.status ===
+                    "IN PROGRESS"
+                ) {
+
+                    statusClass =
+                        "progress";
+
+                }
+
+
+                if (
+                    item.status ===
+                    "RESOLVED"
+                ) {
+
+                    statusClass =
+                        "resolved";
+
+                }
+
+
+                const locationAvailable =
+                    item.latitude !== null &&
+                    item.longitude !== null;
+
+
+                const mapLink =
+                    locationAvailable
+                        ?
+                        "https://www.google.com/maps?q=" +
+                        item.latitude +
+                        "," +
+                        item.longitude
+                        :
+                        "#";
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "emergency-item";
+
+
+                div.innerHTML = `
+
+                    <div class="emergency-header">
+
+                        <div class="emergency-type">
+
+                            ${getEmergencyIcon(item.emergency_type)}
+
+                            ${escapeHtml(item.emergency_type)}
+
+                        </div>
+
+                        <div class="badges">
+
+                            <span class="badge ${severityClass}">
+                                ${escapeHtml(item.severity || "LOW")}
+                            </span>
+
+                            <span class="badge ${statusClass}">
+                                ${escapeHtml(item.status || "NEW")}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="emergency-description">
+
+                        ${escapeHtml(item.description || "No description provided.")}
+
+                    </div>
+
+
+                    <div class="emergency-footer">
+
+                        <span class="date">
+
+                            #${item.id}
+
+                            • ${escapeHtml(item.created_at)}
+
+                        </span>
+
+
+                        ${
+                            locationAvailable
+                            ?
+                            `<a
+                                class="map-button"
+                                href="${mapLink}"
+                                target="_blank">
+                                📍 View Map
+                            </a>`
+                            :
+                            `<span class="date">
+                                Location unavailable
+                            </span>`
+                        }
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(div);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       FILTER
+    ===================================================== */
+
+    function filterEmergencies(
+        type,
+        button
+    ) {
+
+        document
+            .querySelectorAll(
+                ".filter-button"
+            )
+            .forEach(
+                function(btn) {
+
+                    btn.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        button.classList.add(
+            "active"
+        );
+
+
+        if (type === "ALL") {
+
+            renderEmergencies(
+                allEmergencies
+            );
+
+            return;
+
+        }
+
+
+        const filtered =
+            allEmergencies.filter(
+                function(item) {
+
+                    return (
+                        item.emergency_type ===
+                        type
+                    );
+
+                }
+            );
+
+
+        renderEmergencies(
+            filtered
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD ACTIVITY
+    ===================================================== */
+
+    async function loadActivity() {
+
+        const list =
+            document.getElementById(
+                "activityList"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/my_activity"
+                );
+
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "/login";
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !data.success ||
+                !data.activities.length
+            ) {
+
+                list.innerHTML =
+                    '<div class="empty">No activity yet.</div>';
+
+                return;
+
+            }
+
+
+            list.innerHTML = "";
+
+
+            data.activities
+                .slice(0, 15)
+                .forEach(
+                    function(item) {
+
+                        const div =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        div.className =
+                            "activity-item";
+
+
+                        div.innerHTML = `
+
+                            <div class="activity-icon">
+
+                                ${getActivityIcon(item.activity)}
+
+                            </div>
+
+
+                            <div class="activity-text">
+
+                                <strong>
+                                    ${formatActivity(item.activity)}
+                                </strong>
+
+                                <span>
+                                    ${escapeHtml(item.created_at)}
+                                </span>
+
+                            </div>
+
+                        `;
+
+
+                        list.appendChild(div);
+
+                    }
+                );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            list.innerHTML =
+                '<div class="empty">Unable to load activity.</div>';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       NEARBY HELP
+    ===================================================== */
+
+    async function findPlace(placeType) {
+
+        showToast(
+            "📍 Getting your location..."
+        );
+
+
+        const location =
+            await getLocation();
+
+
+        if (
+            location.latitude === null ||
+            location.longitude === null
+        ) {
+
+            showToast(
+                "❌ Location permission is required."
+            );
+
+            return;
+
+        }
+
+
+        const url =
+            "https://www.google.com/maps/search/" +
+            encodeURIComponent(placeType) +
+            "/@" +
+            location.latitude +
+            "," +
+            location.longitude +
+            ",14z";
+
+
+        window.open(
+            url,
+            "_blank"
+        );
+
+
+        showToast(
+            "✅ Nearby " +
+            placeType +
+            " opened in Google Maps."
+        );
+
+    }
+
+
+    /* =====================================================
+       EMERGENCY CONTACT
+    ===================================================== */
+
+    function callEmergencyContact() {
+
+        const emergencyNumber =
+            "+918604394146";
+
+
+        const confirmed =
+            confirm(
+                "📞 Emergency Contact\n\nDo you want to call the emergency contact?"
+            );
+
+
+        if (confirmed) {
+
+            window.location.href =
+                "tel:" + emergencyNumber;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ICON HELPERS
+    ===================================================== */
+
+    function getEmergencyIcon(type) {
+
+        const icons = {
+
+            "Medical": "🚑",
+
+            "Accident": "🚗",
+
+            "Fire": "🔥",
+
+            "Crime": "👮",
+
+            "SOS": "🆘",
+
+            "Other": "⚠️"
+
+        };
+
+
+        return icons[type] || "⚠️";
+
+    }
+
+
+    function getActivityIcon(activity) {
+
+        if (activity === "LOGIN") {
+            return "🔐";
+        }
+
+        if (activity === "LOGOUT") {
+            return "🚪";
+        }
+
+        if (activity === "SOS") {
+            return "🆘";
+        }
+
+        if (activity === "EMERGENCY_REPORT") {
+            return "🚨";
+        }
+
+        return "📋";
+
+    }
+
+
+    function formatActivity(activity) {
+
+        const names = {
+
+            "LOGIN":
+                "Logged into account",
+
+            "LOGOUT":
+                "Logged out",
+
+            "SOS":
+                "SOS alert sent",
+
+            "EMERGENCY_REPORT":
+                "Emergency report submitted"
+
+        };
+
+
+        return (
+            names[activity] ||
+            activity
+        );
+
+    }
+
+
+    /* =====================================================
+       SECURITY HELPER
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent =
+            value == null
+                ? ""
+                : String(value);
+
+        return div.innerHTML;
+
+    }
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    loadEmergencies();
+
+    loadActivity();
+
+
+    /* Refresh dashboard every 30 seconds */
+
+    setInterval(
+        function() {
+
+            loadEmergencies();
+
+            loadActivity();
+
+        },
+        30000
+    );
+
+</script>
+
+
+</body>
+
+</html>

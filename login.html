@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Smart Emergency</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+
+            width: 100%;
+            max-width: 450px;
+
+            padding: 40px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #b30000;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+
+            margin-top: 18px;
+            margin-bottom: 7px;
+
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #b30000;
+        }
+
+        .login-button {
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #b30000;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #8f0000;
+        }
+
+        #message {
+            margin-top: 20px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .register-link {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #666;
+        }
+
+        .register-link a {
+            color: #b30000;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+
+            margin-top: 18px;
+        }
+
+        .back-home a {
+            color: #555;
+
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+
+            .login-card {
+                padding: 30px 22px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-card">
+
+
+        <div class="logo">
+            🚨
+        </div>
+
+
+        <h1>
+            Welcome Back
+        </h1>
+
+
+        <p class="subtitle">
+            Login to Smart Emergency
+        </p>
+
+
+        <form id="loginForm">
+
+
+            <label for="email">
+                Email Address
+            </label>
+
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="login-button">
+
+                🔐 Login
+
+            </button>
+
+
+        </form>
+
+
+        <p id="message"></p>
+
+
+        <div class="register-link">
+
+            Don't have an account?
+
+            <a href="/register">
+                Create Account
+            </a>
+
+        </div>
+
+
+        <div class="back-home">
+
+            <a href="/">
+                ← Back to Home
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+
+        document
+            .getElementById("loginForm")
+            .addEventListener(
+                "submit",
+                async function(event) {
+
+                    event.preventDefault();
+
+
+                    const email =
+                        document
+                            .getElementById("email")
+                            .value
+                            .trim();
+
+
+                    const password =
+                        document
+                            .getElementById("password")
+                            .value;
+
+
+                    const message =
+                        document
+                            .getElementById("message");
+
+
+                    message.style.color =
+                        "#555";
+
+
+                    message.innerText =
+                        "⏳ Logging in...";
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                "/login",
+                                {
+
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            email:
+                                                email,
+
+                                            password:
+                                                password
+
+                                        })
+
+                                }
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (data.success) {
+
+                            message.style.color =
+                                "green";
+
+
+                            message.innerText =
+                                "✅ Login successful!";
+
+
+                            setTimeout(
+                                function() {
+
+                                    window.location.href =
+                                        "/dashboard";
+
+                                },
+                                800
+                            );
+
+
+                        } else {
+
+                            message.style.color =
+                                "#b30000";
+
+
+                            message.innerText =
+                                "❌ " +
+                                data.message;
+
+                        }
+
+
+                    } catch (error) {
+
+                        console.error(error);
+
+
+                        message.style.color =
+                            "#b30000";
+
+
+                        message.innerText =
+                            "❌ Server error. Please try again.";
+
+                    }
+
+                }
+            );
+
+
+    </script>
+
+
+</body>
+
+</html>
